@@ -1,19 +1,16 @@
 import React from 'react';
-import Sky from 'react-sky';
-import {Form, Button, Input, Row, Col} from 'antd';
+import {Form, Button, Input} from 'antd';
 import styles from './registerForm.less';
+import Link from 'umi/link';
 
 class RegistrationForm extends React.Component {
     constructor() {
         super();
-        this.state = {
-            username : '',
-            password: ''
-        }
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
     handleSubmit(e) {
         e.preventDefault();
-        this.props.form.validateFieldsAndScroll((err, values) => {
+        this.props.form.validateFields((err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
                 fetch('http://172.19.168.235:8080/user/register', {
@@ -27,7 +24,9 @@ class RegistrationForm extends React.Component {
                     return res.json()
                 }).then((res)=>{
                     console.log(res)
-                })
+                }).catch((err)=>{
+                    console.log('error: ', err)
+                });
             }
         });
     }
@@ -57,7 +56,7 @@ class RegistrationForm extends React.Component {
             },
           };
         return (
-            <Form onSubmit={this.handleSubmit.bind(this)}>
+            <Form onSubmit={this.handleSubmit}>
                 <Form.Item 
                     {...formItemLayout}
                     label="E-mail"
@@ -102,10 +101,10 @@ class RegistrationForm extends React.Component {
                 <Form.Item {...tailFormItemLayout}
                     // className={styles["override-ant-form-item-label"]}
                 >
-                    <Button type="primary" htmlType="submit" className="login-form-button">
-                        register
+                    <Button type="primary" htmlType="submit">
+                        Register
                     </Button>
-                     &nbsp;&nbsp;Or <a href="">Log in now!</a>
+                     &nbsp;&nbsp;Or <Link to="/user/login">Log in now!</Link>
                 </Form.Item>
             </Form>
         )
@@ -113,42 +112,4 @@ class RegistrationForm extends React.Component {
 }
 
 const WrappedRegistrationForm = Form.create({ name: 'register' })(RegistrationForm);
-
-class Register extends React.Component {
-    render() {
-        const sky = {
-            0: "https://image.flaticon.com/icons/svg/124/124574.svg",
-            1: "https://image.flaticon.com/icons/svg/124/124570.svg",
-            2: "https://image.flaticon.com/icons/svg/124/124567.svg",
-            3: "https://image.flaticon.com/icons/svg/124/124560.svg",
-            4: "https://image.flaticon.com/icons/svg/124/124559.svg",
-            5: "https://image.flaticon.com/icons/svg/124/124582.svg",
-            // 6: "https://image.flaticon.com/icons/svg/124/124558.svg",
-            // 7: "https://image.flaticon.com/icons/svg/124/124588.svg",
-            // 8: "https://image.flaticon.com/icons/svg/124/124542.svg",
-            // 9: "https://image.flaticon.com/icons/svg/124/124569.svg",
-            // 10: "https://image.flaticon.com/icons/svg/124/124573.svg",
-            // 11: "https://image.flaticon.com/icons/svg/124/124586.svg",
-            // 12: "https://image.flaticon.com/icons/svg/124/124548.svg",
-            // 13: "https://image.flaticon.com/icons/svg/124/124555.svg"
-        };
-        return(
-            <div>
-                <Row type="flex" justify="center" align="middle" className={styles.wrapper}>
-                    <Col span={12} className={styles["input-area"]}>
-                        <WrappedRegistrationForm />
-                     </Col>
-                </Row>
-                <Sky
-                    images = {sky}
-                    how = {130}
-                    time = {100}
-                    size = {'100px'}
-                    background={'#2F3939'}
-                />
-            </div>
-
-        )
-    }
-}
-export default Register;
+export default WrappedRegistrationForm;

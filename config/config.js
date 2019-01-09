@@ -5,10 +5,14 @@ export default {
         }],
     ],
     routes: [{
-        path: "/",
-        component: "./register/RegistrationForm",
-    },{
-        path: "/hello",
-        component: "./hello"
+        path: '/',
+        component: 'User/BasicLayout',
+        routes: [{
+            path: '/',
+            component: 'User/Register/RegistrationForm'
+        },{
+            path: '/user/login',
+            component: 'User/Login/LoginForm'
+        }]
     }],
 };
