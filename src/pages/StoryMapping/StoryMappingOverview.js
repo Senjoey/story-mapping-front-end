@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, List, Button, Icon, Menu, Dropdown} from 'antd';
+import { Card, List, Button, Icon, Menu, Dropdown, Modal} from 'antd';
 import styles from './storyMappingOverview.less';
 import {translateTimestampToTime} from '../../util/DateUtil'
 
@@ -11,27 +11,14 @@ export default class StoryMappingOverviewPage extends Component {
                 {
                     id: '1',
                     title: 'StoryMappingTool',
-                    createTime: '1'
+                    createTime: 'null'
                 },
-                {
-                    id: '2',
-                    title: '大学生出游协同工具',
-                    createTime: '1'
-                },
-                {
-                    id: '3',
-                    title: '大学生出游协同工具',
-                    createTime: '1'
-                },
-                {
-                    id: '4',
-                    title: '大学生出游协同工具',
-                    createTime: '1'
-                }
-            ]
+            ],
+            ModalText: 'Content of the modal',
+            visible: false,
+            confirmLoading: false,
         }
     }
-
     componentWillMount () {
         this._getMapList();
     }
@@ -61,12 +48,73 @@ export default class StoryMappingOverviewPage extends Component {
                     console.log('error: ', err)
                 });
     };
-
+    showModal() {
+        this.setState({
+            visible: true,
+        });
+    }
+    handleOk(){
+        let createMapList = this.state.createMapList;
+        this.setState({
+            ModalText: '正在添加用户故事地图...',
+            confirmLoading: true,
+        });
+        fetch('http://172.19.240.8:8080/map', {
+            method: 'POST',
+            mode: "cors",
+            headers: new Headers({
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }),
+            //TODO title获取用户输入
+            body: JSON.stringify({'title': '用户故事地图1'})
+        }).then((res)=>{
+            return res.json()
+        }).then((res)=>{
+            console.log(res);
+            createMapList.push({
+                title: res.content.title,
+                createTime: translateTimestampToTime(res.content.createTime)
+            });
+            this.setState({
+                createMapList: createMapList,
+                visible: false,
+                confirmLoading: false,
+            })
+        }).catch((err)=>{
+            console.log('error: ', err)
+        });
+    }
+    handleCancel() {
+        this.setState({
+            visible: false,
+        });
+    }
+    handleMapDelete() {
+        //TODO 获取当前的mapID
+        fetch('http://172.19.240.8:8080/map?mapId=14', {
+            method: 'DELETE',
+            mode: "cors",
+            headers: new Headers({
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }),
+        }).then((res)=>{
+            return res.json()
+        }).then((res)=>{
+            console.log(res);
+            if(res.success) {
+                this._getMapList();
+            }
+        }).catch((err)=>{
+            console.log('error: ', err)
+        });
+    }
     render() {
         const menu = (
             <Menu className={styles.menu}>
-                <Menu.Item><Icon type="edit" />修改</Menu.Item>
-                <Menu.Item><Icon type="minus" />删除</Menu.Item>
+                <Menu.Item ><Icon type="edit" />修改</Menu.Item>
+                <Menu.Item onClick={this.handleMapDelete.bind(this)}><Icon type="minus" />删除</Menu.Item>
             </Menu>
         );
         const dropdownGroup = (
@@ -76,6 +124,7 @@ export default class StoryMappingOverviewPage extends Component {
                 </Dropdown>
             </span>
         );
+        const { visible, confirmLoading, ModalText } = this.state;
         return(
             <div style={{maxWidth: "1200px", margin:"0 auto"}}>
                 <div className={styles.cardList}>
@@ -97,9 +146,18 @@ export default class StoryMappingOverviewPage extends Component {
                                 </List.Item>
                             ) : (
                                 <List.Item>
-                                    <Button type="dashed" className={styles.newButton}>
+                                    <Button type="dashed" className={styles.newButton} onClick={this.showModal.bind(this)}>
                                         <Icon type="plus" /> 新增故事地图
                                     </Button>
+                                    <Modal
+                                        title="Title"
+                                        visible={visible}
+                                        onOk={this.handleOk.bind(this)}
+                                        confirmLoading={confirmLoading}
+                                        onCancel={this.handleCancel.bind(this)}
+                                    >
+                                        <p>{ModalText}</p>
+                                    </Modal>
                                 </List.Item>
                             )
                         }

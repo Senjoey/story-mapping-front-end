@@ -1,5 +1,5 @@
 import React from 'react';
-import {Form, Button, Input, Icon} from 'antd';
+import {Form, Button, Input, Icon, message} from 'antd';
 import Link from 'umi/link';
 import styles from '../Register/registerForm.less';
 class LoginForm extends  React.Component {
@@ -39,7 +39,8 @@ class LoginForm extends  React.Component {
             localStorage.setItem('user', values.email);
             this.props.history.push('/dashboard/storymapping');
         } else {
-            alert(res.message)
+            // alert(res.message)
+            message.error(res.message);
         }
     };
 
