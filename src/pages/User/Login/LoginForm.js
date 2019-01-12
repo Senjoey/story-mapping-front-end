@@ -22,13 +22,27 @@ class LoginForm extends  React.Component {
                 }).then((res)=>{
                     return res.json()
                 }).then((res)=>{
-                    console.log(res)
+                    console.log(res);
+                    this.handleRequestResult(res, values);
                 }).catch((err)=>{
-                    console.log("error: ", err)
+                    console.log('error: ', err)
                 });
             }
         });
     }
+
+    handleRequestResult = (res, values) => {
+        // status = ;
+        if(res.success) {
+            localStorage.clear();
+            localStorage.setItem('token', res.content);
+            localStorage.setItem('user', values.email);
+            this.props.history.push('/dashboard/storymapping');
+        } else {
+            alert(res.message)
+        }
+    };
+
     render() {
         const {getFieldDecorator}  = this.props.form;
         const formItemLayout = {

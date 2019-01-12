@@ -1,25 +1,55 @@
 import React from 'react';
 import {Layout} from 'antd';
 import MyGlobalHeader from "../../component/MyGlobalHeader/index";
-import styles from './basicLayout.less'
+import styles from './basicLayout.less';
+
 const {Header, Content} = Layout;
 
 class BasicDashBoardLayout extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            userInfo: {
+                name: 'user',
+            }
+        };
+    }
+    componentWillMount () {
+        this._getUserInfo();
+    }
+    _getUserInfo = () => {
+        let userInfo = {};
+        fetch('http://172.19.240.8:8080/user/info', {
+                    method: 'GET',
+                    mode: "cors",
+                    headers: new Headers({
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    }),
+                }).then((res)=>{
+                    return res.json()
+                }).then((res)=>{
+                    console.log(res);
+                    userInfo = res.content;
+                    this.setState({userInfo: userInfo})
+                }).catch((err)=>{
+                    console.log('error: ', err)
+                });
+    };
     render () {
         return (
             <Layout>
                 <Header className={styles["override-ant-layout-header"]}>
                     <MyGlobalHeader
                         currentUser={{
-                          name: 'StarryLemon',
+                          name: this.state.userInfo.name,
                           avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
-                          userid: '00000001',
                         }}
                     />
                 </Header>
 
                 <Content>
-                    <div style={{ background: '#fff', padding: 48, minHeight: 360 }}>
+                    <div className={styles.content}>
                         {this.props.children}
                     </div>
                 </Content>
