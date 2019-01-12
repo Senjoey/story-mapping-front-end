@@ -12,7 +12,7 @@ class LoginForm extends  React.Component {
         this.props.form.validateFields((err, values) => {
             if(!err) {
                 console.log('Received values of form: ', values);
-                fetch('http://172.19.168.235:8080/user/login', {
+                fetch('http://172.19.240.8:8080/user/login', {
                     method: 'POST',
                     mode: "cors",
                     headers: new Headers({
