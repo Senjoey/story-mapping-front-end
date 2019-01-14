@@ -1,6 +1,6 @@
 import React from 'react';
 import {Row, Col} from 'antd';
-import styles from './Register/registerForm.less';
+import styles from './Register/RegisterForm.less';
 import Sky from 'react-sky';
 
 class BasicLayout extends React.Component {

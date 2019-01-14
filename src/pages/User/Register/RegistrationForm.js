@@ -1,7 +1,8 @@
 import React from 'react';
 import {Form, Button, Input} from 'antd';
-import styles from './registerForm.less';
+import styles from './RegisterForm.less';
 import Link from 'umi/link';
+import {serverIP} from "../../../util/GlobalConstants";
 
 class RegistrationForm extends React.Component {
     constructor() {
@@ -13,7 +14,7 @@ class RegistrationForm extends React.Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
-                fetch('http://172.19.240.8:8080/user/register', {
+                fetch(`${serverIP}/user/register`, {
                     method: 'POST',
                     mode: "cors",
                     headers: new Headers({

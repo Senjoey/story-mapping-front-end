@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Card, List, Button, Icon, Menu, Dropdown, Modal, message, Form, Input} from 'antd';
-import styles from './storyMappingOverview.less';
+import styles from './StoryMappingOverview.less';
 import {translateTimestampToTime} from '../../util/DateUtil'
+import {serverIP} from "../../util/GlobalConstants";
 
 class StoryMappingOverviewPage extends Component {
     constructor() {
@@ -25,7 +26,7 @@ class StoryMappingOverviewPage extends Component {
     _getMapList = ()=> {
         let createMapList = [];
         let memberMapList = [];
-        fetch('http://172.19.240.8:8080/map', {
+        fetch(`${serverIP}/map`, {
                     method: 'GET',
                     mode: "cors",
                     headers: new Headers({
@@ -62,7 +63,7 @@ class StoryMappingOverviewPage extends Component {
         this.props.form.validateFields((err, values) => {
             if(!err) {
                 console.log('Received values of form: ', values);
-                fetch('http://172.19.240.8:8080/map', {
+                fetch(`${serverIP}/map`, {
                     method: 'POST',
                     mode: "cors",
                     headers: new Headers({
@@ -97,7 +98,7 @@ class StoryMappingOverviewPage extends Component {
         });
     }
     handleMapDelete(mapID) {
-        fetch(`http://172.19.240.8:8080/map?mapId=${mapID}`, {
+        fetch(`${serverIP}/map?mapId=${mapID}`, {
             method: 'DELETE',
             mode: "cors",
             headers: new Headers({
@@ -115,10 +116,18 @@ class StoryMappingOverviewPage extends Component {
             console.log('error: ', err)
         });
     }
+
     handleMapEdit(mapID) {
-        //TODO 获取当前的mapID
+        //TODO 还需要完善修改故事地图信息
         message.success(`当前ID: ${mapID}`);
     }
+
+    handleMapDetailInfo(mapID) {
+        //TODO 跳转到地图详情页面
+        localStorage.setItem('mapID', mapID);
+        this.props.history.push('/dashboard/storymapiingdetail');
+    }
+
     render() {
         // const menu = (
         //     <Menu className={styles.menu}>
@@ -148,6 +157,7 @@ class StoryMappingOverviewPage extends Component {
                                     <Card
                                         hoverable
                                         title={item.title}
+                                        onClick={this.handleMapDetailInfo.bind(this, item.id)}
                                         // extra={dropdownGroup}
                                         extra={
                                             <span className={styles.iconGroup}>

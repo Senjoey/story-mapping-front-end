@@ -12,7 +12,9 @@ export default {
             component: 'Dashboard/BasicLayout',
             routes: [
                 {path: '/dashboard', component: 'Dashboard/Analysis'},
-                {path: '/dashboard/storymapping', component: 'StoryMapping/StoryMappingOverview'}
+                {path: '/dashboard/storymapiingdetail', component: 'StoryMapping/StoryMappingDetail'},
+                {path: '/dashboard/storymapping', component: 'StoryMapping/StoryMappingOverview'},
+                {path: '/dashboard/test', component: 'StoryMapping/StoryMappingDetail'}
             ]
         },
         // User
@@ -23,5 +25,6 @@ export default {
                 { path: '/', component: 'User/Register/RegistrationForm'},
                 { path: '/user/login', component: 'User/Login/LoginForm'}
         ]},
+
     ],
 };

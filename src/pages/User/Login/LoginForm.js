@@ -1,7 +1,9 @@
 import React from 'react';
 import {Form, Button, Input, Icon, message} from 'antd';
 import Link from 'umi/link';
-import styles from '../Register/registerForm.less';
+import styles from '../Register/RegisterForm.less';
+import {serverIP} from "../../../util/GlobalConstants";
+
 class LoginForm extends  React.Component {
     constructor() {
         super();
@@ -12,7 +14,7 @@ class LoginForm extends  React.Component {
         this.props.form.validateFields((err, values) => {
             if(!err) {
                 console.log('Received values of form: ', values);
-                fetch('http://172.19.240.8:8080/user/login', {
+                fetch(`${serverIP}/user/login`, {
                     method: 'POST',
                     mode: "cors",
                     headers: new Headers({
@@ -39,7 +41,6 @@ class LoginForm extends  React.Component {
             localStorage.setItem('user', values.email);
             this.props.history.push('/dashboard/storymapping');
         } else {
-            // alert(res.message)
             message.error(res.message);
         }
     };

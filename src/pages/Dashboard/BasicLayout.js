@@ -1,7 +1,8 @@
 import React from 'react';
 import {Layout} from 'antd';
 import MyGlobalHeader from "../../component/MyGlobalHeader/index";
-import styles from './basicLayout.less';
+import styles from './BasicLayout.less';
+import {serverIP} from "../../util/GlobalConstants";
 
 const {Header, Content} = Layout;
 
@@ -19,7 +20,7 @@ class BasicDashBoardLayout extends React.Component {
     }
     _getUserInfo = () => {
         let userInfo = {};
-        fetch('http://172.19.240.8:8080/user/info', {
+        fetch(`${serverIP}/user/info`, {
                     method: 'GET',
                     mode: "cors",
                     headers: new Headers({
