@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import StoryCard from './StoryCard';
 import styles from './StoryMappingDetail.less';
 import UserStory from "./UserStory";
+import TaskCard from "./TaskCard";
 
 export default class Task extends Component {
     render() {
@@ -9,7 +10,7 @@ export default class Task extends Component {
         let storyList = task.storyList;
         return(
             <div className={styles.taskWrapper}>
-                <StoryCard name="task" content={task.task.title} />
+                <TaskCard name="task" content={task.task.title} />
                 <UserStory data={storyList} task={task.task.id}/>
             </div>
         );

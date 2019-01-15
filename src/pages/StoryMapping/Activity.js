@@ -4,6 +4,7 @@ import styles from './StoryMappingDetail.less';
 import Task from "./Task";
 import {Button, Icon, Modal, Form, Input} from 'antd';
 import {serverIP} from "../../util/GlobalConstants";
+import ActivityCard from "./ActivityCard";
 
 class Activity extends Component {
     constructor() {
@@ -83,7 +84,7 @@ class Activity extends Component {
         const { getFieldDecorator } = this.props.form;
         return(
             <div className={styles.activityWrapper}>
-                <StoryCard name="activity" content={activity.activity.title}/>
+                <ActivityCard name="activity" content={activity.activity.title}/>
                 <div style={{display: 'flex'}}>
                    {
                     this.state.taskList.map(task => {

@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import StoryCard from './StoryCard';
+import {myRemove} from "../../util/ArrayUtil";
 import styles from './StoryMappingDetail.less';
-import {Button, Icon, Modal, Form, Input} from 'antd';
+import {Button, Icon, Modal, Form, Input, Card, Col} from 'antd';
 import {serverIP} from "../../util/GlobalConstants";
+import storyStyles from './StoryCard.less';
+import IconFont from '../../util/IconFont';
 
 class UserStory extends Component {
     constructor() {
@@ -72,6 +74,30 @@ class UserStory extends Component {
         });
     }
 
+    handleStoryDelete(storyId) {
+        let storyList = this.state.storyList;
+        fetch(`${serverIP}/story?storyId=${storyId}`, {
+            method: 'DELETE',
+            mode: "cors",
+            headers: new Headers({
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }),
+            }).then((res)=>{
+                return res.json()
+            }).then((res)=>{
+                console.log(res);
+                if(res.success) {
+                    storyList = myRemove(storyList, storyId);
+                    this.setState({
+                        storyList: storyList,
+                    })
+                }
+            }).catch((err)=>{
+                console.log('error: ', err)
+        });
+    }
+
     render() {
         this.state.storyList = this.props.data;
         this.state.taskId = this.props.task;
@@ -82,8 +108,16 @@ class UserStory extends Component {
                 {
                     this.state.storyList.map(story => {
                         return(
-                            <StoryCard name="story" key={`story${story.id}`} content={story.title}>
-                            </StoryCard>
+                            <Col key={`story${story.id}`}>
+                                <Card
+                                bordered={false}
+                                hoverable={true}
+                                className={`${storyStyles['story']} ${storyStyles.cardItem} ${storyStyles["override-ant-card"]}`}
+                                >
+                                    <p>{story.title}</p>
+                                    <IconFont type="icon-delete" className={storyStyles.deleteIcon} onClick={this.handleStoryDelete.bind(this, story.id)}/>
+                                </Card>
+                            </Col>
                         );
                     })
                 }
