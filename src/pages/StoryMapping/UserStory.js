@@ -5,11 +5,11 @@ export default class UserStory extends Component {
     render() {
         let storyList = this.props.data;
         return(
-            <div className={styles.userStory}>
+            <div className={styles.storyWrapper}>
                 {
-                    storyList.map(card => {
+                    storyList.map(story => {
                         return(
-                            <StoryCard key={card.id} name="story" content={card.content}>
+                            <StoryCard key={story.id} name="story" content={story.content}>
                             </StoryCard>
                         );
                     })

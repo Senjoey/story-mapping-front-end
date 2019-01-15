@@ -1,3 +1,4 @@
+@import '~antd/lib/style/themes/default.less';
 .wrapper {
   background: rgb(236, 239, 243);
 }
@@ -19,8 +20,18 @@
   display: flex;
 }
 
+.activityWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
 .task {
   display: flex;
+}
+
+.taskWrapper {
+  display: flex;
+  flex-direction: column;
 }
 
 .activityAndTaskWrapper {
@@ -39,5 +50,18 @@
 
 .userStory {
   display: flex;
+}
+
+.storyWrapper {
+  display: flex;
   flex-direction: column;
+}
+
+.addCard {
+  background-color: #fff;
+  border-color: @border-color-base;
+  border-radius: @border-radius-sm;
+  color: @text-color-secondary;
+  width: 120px;
+  height: 80px;
 }

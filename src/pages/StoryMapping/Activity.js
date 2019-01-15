@@ -1,20 +1,24 @@
 import React, { Component } from 'react';
 import StoryCard from './StoryCard';
 import styles from './StoryMappingDetail.less';
+import Task from "./Task";
 export default class Activity extends Component {
     render() {
-        let activityList = this.props.data;
+        let activity = this.props.data;
+        let taskList = activity.taskList;
         return(
-            <div className={styles.activity}>
-                {/*<StoryCard name="activity"/>*/}
-                {
-                    activityList.map(card => {
+            <div className={styles.activityWrapper}>
+                <StoryCard key={activity.id} name="activity" content={activity.content}/>
+                <div style={{display: 'flex'}}>
+                   {
+                    taskList.map(task => {
                         return(
-                            <StoryCard key={card.id} name="activity" content={card.content}>
-                            </StoryCard>
+                            <Task data={task}/>
                         );
                     })
-                }
+                    }
+                </div>
+
             </div>
         );
     }

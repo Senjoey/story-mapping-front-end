@@ -6,6 +6,11 @@ export default {
         }],
     ],
     routes: [
+        //Test
+        {
+            path: 'test',
+            component: 'StoryMapping/AddCard'
+        },
         //App
         {
             path: '/dashboard',
