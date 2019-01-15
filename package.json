@@ -18,6 +18,8 @@
   },
   "dependencies": {
     "antd": "^3.11.6",
-    "react-sky": "^1.1.0"
+    "react-scrollbar": "^0.5.4",
+    "react-sky": "^1.1.0",
+    "react-virtualized": "^9.21.0"
   }
 }

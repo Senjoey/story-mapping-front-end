@@ -4,11 +4,9 @@ import styles from './StoryMappingDetail.less'
 export default class AddCard extends Component {
     render() {
         return(
-            <div>
-                <Button type="dashed" className={styles.addCard}>
-                    <Icon type="plus" /> 新增卡片
-                </Button>
-            </div>
+            <Button type="dashed" className={styles.addCard}>
+                    <Icon type="plus" /> 新增{this.props.content}
+            </Button>
         );
     }
 }

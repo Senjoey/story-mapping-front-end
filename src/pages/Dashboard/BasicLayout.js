@@ -49,7 +49,7 @@ class BasicDashBoardLayout extends React.Component {
                     />
                 </Header>
 
-                <Content>
+                <Content style={{background: '#fff'}}>
                     <div className={styles.content}>
                         {this.props.children}
                     </div>
