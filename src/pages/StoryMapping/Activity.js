@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import StoryCard from './StoryCard';
 import styles from './StoryMappingDetail.less';
 import Task from "./Task";
-import {Button, Icon, Modal, Form, Input} from 'antd';
+import {Button, Icon, Modal, Form, Input, message} from 'antd';
 import {serverIP} from "../../util/GlobalConstants";
 import ActivityCard from "./ActivityCard";
+import {myRemoveCard} from "../../util/ArrayUtil";
+import {CardType} from "../../util/CardType";
 
 class Activity extends Component {
     constructor() {
@@ -13,7 +14,7 @@ class Activity extends Component {
             taskList : [],
             visible: false,
             confirmLoading: false,
-            activityId: -1
+            activityId: -1,
         };
     }
     showModal() {
@@ -76,6 +77,47 @@ class Activity extends Component {
             visible: false,
         });
     }
+    handleTaskDelete(taskId) {
+        let taskList = this.state.taskList;
+        let canBeDelete = true;
+        for (let i = 0; i < taskList.length; i++) {
+            let ta = taskList[i];
+            if (ta.task.id === taskId) {
+                if (ta.storyList.length > 0) {
+                    canBeDelete = false;
+                    break;
+                }
+            }
+        }
+        //不能删
+        if (!canBeDelete) {
+            message.warning('该task还有story，不能删除该task!');
+        } else {
+            //能删
+            fetch(`${serverIP}/task?taskId=${taskId}`, {
+            method: 'DELETE',
+            mode: "cors",
+            headers: new Headers({
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }),
+            }).then((res)=>{
+                return res.json()
+            }).then((res)=>{
+                console.log(res);
+                if(res.success) {
+                    taskList = myRemoveCard(taskList, taskId, CardType.TASK);
+                    this.setState({
+                        taskList: taskList,
+                    })
+                }
+            }).catch((err)=>{
+                console.log('error: ', err)
+            });
+        }
+    }
+
+
     render() {
         let activity = this.props.data;
         this.state.activityId = activity.activity.id;
@@ -84,12 +126,14 @@ class Activity extends Component {
         const { getFieldDecorator } = this.props.form;
         return(
             <div className={styles.activityWrapper}>
-                <ActivityCard name="activity" content={activity.activity.title}/>
+                <ActivityCard name="activity" content={activity.activity.title}
+                    handleActivityDelete={this.props.handleActivityDelete}
+                />
                 <div style={{display: 'flex'}}>
                    {
                     this.state.taskList.map(task => {
                         return(
-                            <Task data={task} key={`task${task.task.id}`}/>
+                            <Task data={task} key={`task${task.task.id}`} handleTaskDelete={this.handleTaskDelete.bind(this, task.task.id)}/>
                         );
                     })
                     }

@@ -13,7 +13,9 @@ export default class ActivityCard extends Component {
                     className={`${styles[cardType]} ${styles.cardItem} ${styles["override-ant-card"]}`}
                 >
                     <p>{this.props.content}</p>
-                    <IconFont type="icon-delete" className={styles.deleteIcon}/>
+                    <IconFont type="icon-delete" className={styles.deleteIcon}
+                              onClick={this.props.handleActivityDelete}
+                    />
                 </Card>
             </Col>
         );

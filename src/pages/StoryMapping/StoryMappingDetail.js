@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import {serverIP} from '../../util/GlobalConstants';
 import styles from './StoryMappingDetail.less';
 import Activity from "./Activity";
-import AddCard from "./AddCard";
-import {Button, Icon, Modal, Form, Input} from 'antd';
+import {Button, Icon, Modal, Form, Input, message} from 'antd';
+import {CardType} from "../../util/CardType";
+import {myRemoveCard} from "../../util/ArrayUtil";
 
 class StoryMappingDetailInfo extends Component{
     constructor() {
@@ -117,6 +118,46 @@ class StoryMappingDetailInfo extends Component{
         });
     }
 
+    handleActivityDelete(activityId) {
+        let activityList = this.state.activityList;
+        let canBeDelete = true;
+        for (let i = 0; i < activityList.length; i++) {
+            let ac = activityList[i];
+            if (ac.activity.id === activityId) {
+                if (ac.taskList.length > 0) {
+                    canBeDelete = false;
+                    break;
+                }
+            }
+        }
+        //不能删
+        if (!canBeDelete) {
+            message.warning('该activity还有task，不能删除该activity!');
+        } else {
+            //能删
+            fetch(`${serverIP}/activity?activityId=${activityId}`, {
+            method: 'DELETE',
+            mode: "cors",
+            headers: new Headers({
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }),
+            }).then((res)=>{
+                return res.json()
+            }).then((res)=>{
+                console.log(res);
+                if(res.success) {
+                    activityList = myRemoveCard(activityList, activityId, CardType.ACTIVITY);
+                    this.setState({
+                        activityList: activityList,
+                    })
+                }
+            }).catch((err)=>{
+                console.log('error: ', err)
+            });
+        }
+    }
+
     render() {
         const { visible, confirmLoading} = this.state;
         const { getFieldDecorator } = this.props.form;
@@ -127,7 +168,9 @@ class StoryMappingDetailInfo extends Component{
                     {
                         this.state.activityList.map(activity => {
                             return(
-                                    <Activity data={activity} key={`activity${activity.activity.id}`}/>
+                                    <Activity data={activity} key={`activity${activity.activity.id}`}
+                                      handleActivityDelete={this.handleActivityDelete.bind(this, activity.activity.id)}
+                                    />
                             );
                         })
                     }

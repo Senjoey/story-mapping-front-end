@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import {myRemove} from "../../util/ArrayUtil";
+import {myRemoveCard} from "../../util/ArrayUtil";
 import styles from './StoryMappingDetail.less';
 import {Button, Icon, Modal, Form, Input, Card, Col} from 'antd';
 import {serverIP} from "../../util/GlobalConstants";
 import storyStyles from './StoryCard.less';
 import IconFont from '../../util/IconFont';
+import {CardType} from "../../util/CardType";
 
 class UserStory extends Component {
     constructor() {
@@ -88,7 +89,7 @@ class UserStory extends Component {
             }).then((res)=>{
                 console.log(res);
                 if(res.success) {
-                    storyList = myRemove(storyList, storyId);
+                    storyList = myRemoveCard(storyList, storyId, CardType.STORY);
                     this.setState({
                         storyList: storyList,
                     })
