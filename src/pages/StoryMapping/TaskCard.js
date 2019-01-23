@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Card, Col} from 'antd';
 import styles from './StoryCard.less';
-import IconFont from '../../util/IconFont'
+import IconFont from '../../util/IconFont';
 export default class TaskCard extends Component {
     handleTaskDelete(taskId){
         this.props.handleTaskDelete(taskId);

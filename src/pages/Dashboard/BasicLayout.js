@@ -46,6 +46,7 @@ class BasicDashBoardLayout extends React.Component {
                           name: this.state.userInfo.name,
                           avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
                         }}
+                        history={this.props.history}
                     />
                 </Header>
 

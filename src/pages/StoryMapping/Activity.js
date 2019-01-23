@@ -152,7 +152,7 @@ class Activity extends Component {
                             {getFieldDecorator('title', {
                                 rules: [{ required: true }],
                             })(
-                                <Input />
+                                <Input autoComplete="off"/>
                             )}
                             </Form.Item>
                         </Form>

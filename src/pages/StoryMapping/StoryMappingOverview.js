@@ -15,7 +15,6 @@ class StoryMappingOverviewPage extends Component {
                     createTime: 'null'
                 },
             ],
-            ModalText: 'Content of the modal',
             visible: false,
             confirmLoading: false,
         }
@@ -193,7 +192,7 @@ class StoryMappingOverviewPage extends Component {
                                                 {getFieldDecorator('title', {
                                                     rules: [{ required: true }],
                                                 })(
-                                                    <Input />
+                                                    <Input autoComplete="off"/>
                                                 )}
                                             </Form.Item>
                                         </Form>

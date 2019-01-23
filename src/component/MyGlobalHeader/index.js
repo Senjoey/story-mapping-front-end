@@ -3,20 +3,41 @@ import { Menu, Icon, Spin, Dropdown, Avatar} from 'antd';
 import styles from './index.less';
 
 export default class MyGlobalHeader extends PureComponent {
+    constructor() {
+        super();
+        this.state = {
+            current: 'map'
+        }
+
+    }
+    handleClickMap(e) {
+        this.props.history.push('/dashboard/storymapping');
+        this.setState({
+            current: e.key
+        });
+    }
+
+    handleClickFriends(e) {
+        this.props.history.push('/dashboard/friends');
+        this.setState({
+            current: e.key
+        });
+    }
+
     render() {
         const {
             currentUser = {},
         } = this.props;
         const menu = (
-            <Menu className={styles.menu} selectedKeys={[]}>
-                <Menu.Item>
+            <Menu className={styles.menu} selectedKeys={[this.state.current]}>
+                <Menu.Item onClick={this.handleClickMap.bind(this)} key="map">
                     <Icon type="table" />故事地图
                 </Menu.Item>
-                <Menu.Item>
+                <Menu.Item key="friends" onClick={this.handleClickFriends.bind(this)}>
                     <Icon type="team" />管理好友
                 </Menu.Item>
                 <Menu.Divider />
-                <Menu.Item>
+                <Menu.Item key="person">
                     <Icon type="user" />个人中心
                 </Menu.Item>
                 <Menu.Item key="logout">

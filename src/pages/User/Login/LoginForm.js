@@ -81,7 +81,7 @@ class LoginForm extends  React.Component {
                             required: true, message: 'Please input your E-mail!',
                         }],
                 })(
-                    <Input prefix={<Icon type="mail" className={styles["login-input"]} />} placeholder="Email" />
+                    <Input prefix={<Icon type="mail" className={styles["login-input"]} />} placeholder="Email"/>
                 )}
                 </Form.Item>
                 <Form.Item
@@ -90,7 +90,7 @@ class LoginForm extends  React.Component {
                 {getFieldDecorator('password', {
                     rules: [{ required: true, message: 'Please input your Password!' }],
                 })(
-                    <Input prefix={<Icon type="lock" className={styles["login-input"]} />} type="password" placeholder="Password" />
+                    <Input prefix={<Icon type="lock" className={styles["login-input"]} />} type="password" placeholder="Password"/>
                 )}
                 </Form.Item>
                 <Form.Item

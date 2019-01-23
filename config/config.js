@@ -19,6 +19,7 @@ export default {
                 {path: '/dashboard', component: 'Dashboard/Analysis'},
                 {path: '/dashboard/storymapiingdetail', component: 'StoryMapping/StoryMappingDetail'},
                 {path: '/dashboard/storymapping', component: 'StoryMapping/StoryMappingOverview'},
+                {path: '/dashboard/friends', component: 'Friends/FriendsList'},
                 {path: '/dashboard/test', component: 'StoryMapping/StoryMappingDetail'}
             ]
         },

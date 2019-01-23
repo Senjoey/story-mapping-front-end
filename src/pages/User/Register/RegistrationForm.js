@@ -70,7 +70,7 @@ class RegistrationForm extends React.Component {
                             required: true, message: 'Please input your E-mail!',
                         }],
                     })(
-                    <Input />
+                    <Input autoComplete="off"/>
                     )}
                 </Form.Item>
                 <Form.Item
@@ -83,7 +83,7 @@ class RegistrationForm extends React.Component {
                             required: true, message: 'Please input your name!',
                         }],
                     })(
-                    <Input />
+                    <Input autoComplete="off"/>
                     )}
                 </Form.Item>
                 <Form.Item
@@ -96,7 +96,7 @@ class RegistrationForm extends React.Component {
                             required: true, message: 'Please input your password!',
                             }],
                     })(
-                    <Input type="password" />
+                    <Input type="password" autoComplete="off"/>
                     )}
                 </Form.Item>
                 <Form.Item {...tailFormItemLayout}
