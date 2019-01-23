@@ -1,20 +1,22 @@
-.wrapper {
-  min-height: 760px;
-}
+@import '~antd/lib/style/themes/default.less';
 
-.input-area {
-  background: #7EA8BE;
-  opacity: 0.95;
-  border-radius: 7px;
-  padding: 50px;
-}
+.main {
+    width: 368px;
+    margin: 0 auto;
 
-.override-ant-form-item-label label {
-    font-size: 21px;
-    color: #FCFAF9;
-}
+    :global {
+      .ant-form-item {
+        margin-bottom: 8px;
+      }
+    }
 
-.login-input {
-  color: rgba(0, 0, 0, .25)
-}
+    .submit {
+      width: 100%;
+      margin-top: 12px;
+    }
 
+    .login {
+      float: right;
+      line-height: @btn-height-lg;
+    }
+}

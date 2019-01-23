@@ -26,10 +26,11 @@ export default {
         // User
         {
             path: '/',
-            component: 'User/UserLayout',
+            component: 'User/MyUserLayout',
             routes: [
-                { path: '/', component: 'User/Register/RegistrationForm'},
-                { path: '/user/login', component: 'User/Login/LoginForm'}
+                { path: '/', component: 'User/Login/MyLoginForm'},
+                { path: '/user/login', component: 'User/Login/MyLoginForm'},
+                { path: '/user/register', component: 'User/Register/MyRegistrationForm'},
         ]},
 
     ],

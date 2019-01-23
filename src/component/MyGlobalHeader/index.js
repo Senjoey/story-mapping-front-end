@@ -34,7 +34,7 @@ export default class MyGlobalHeader extends PureComponent {
                     <Icon type="table" />故事地图
                 </Menu.Item>
                 <Menu.Item key="friends" onClick={this.handleClickFriends.bind(this)}>
-                    <Icon type="team" />管理好友
+                    <Icon type="team" />好友管理
                 </Menu.Item>
                 <Menu.Divider />
                 <Menu.Item key="person">
