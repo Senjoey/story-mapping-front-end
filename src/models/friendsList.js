@@ -13,6 +13,10 @@ export default {
             console.log('rsp.content: ', rsp.content);
             yield put({ type: 'saveList', payload: { friends: rsp.content } });
         },
+        *deleteOne({ payload }, { call, put }) {
+            const rsp = yield call(friendsService.deleteOne, payload);
+            return rsp;
+        },
     },
 
     reducers: {

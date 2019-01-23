@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import {List, Icon, Button, Modal, Form, Input} from 'antd';
+import {List, Icon, Button, Modal, Form, Input, message, Popconfirm} from 'antd';
 import styles from './FriendsList.less';
-import IconFont from '../../util/IconFont';
 import { connect } from 'dva';
+
+const namespace = 'friendsList';
 
 class FriendsListPage extends Component {
     constructor() {
@@ -16,39 +17,42 @@ class FriendsListPage extends Component {
         this.queryList();
     }
 
-    queryList = () => {
-        this.props.dispatch({
-            type: 'friendsList/queryList',
-        });
-    };
     showModal() {
         this.setState({
             visible: true,
         });
     }
+
     handleOK() {
 
     }
+
     handleCancel() {
         this.setState({
             visible: false,
         });
     }
-    render() {
-        // const data = [
-        //     {
-        //         name: 'LiuXing',
-        //         email: 'mf1832103@smail.nju.edu.cn'
-        //     },
-        //     {
-        //         name: 'TanQiong',
-        //         email: 'mf1832143@smail.nju.edu.cn'
-        //     }
-        // ];
-        const deleteButton = (
-                <IconFont type="icon-delete" className={styles.deleteButton}/>
-        );
 
+    queryList = () => {
+        this.props.dispatch({
+            type: `${namespace}/queryList`,
+        });
+    };
+
+    deleteOne = (id) => {
+            this.props.dispatch({
+            type: `${namespace}/deleteOne`,
+            payload: id,
+        }).then((res) => {
+            if(res.success) {
+                message.success('删除成功');
+                this.queryList();
+            } else {
+                alert(res.content);
+            }
+        });
+    };
+    render() {
         const { visible, confirmLoading} = this.state;
         const { getFieldDecorator } = this.props.form;
 
@@ -59,7 +63,15 @@ class FriendsListPage extends Component {
                     dataSource={['', ...this.props.friendsList]}
                     renderItem={ item =>
                         item ? (
-                            <List.Item actions={[deleteButton]} >
+                            <List.Item actions={[
+                                <Popconfirm
+                                    title="确认删除该好友吗？" okText="确认" cancelText="取消"
+                                    onConfirm={() => this.deleteOne(item.id)}
+                                    placement="topRight"
+                                >
+                                    <Icon type={'delete'}/>
+                                </Popconfirm>
+                            ]} >
                                 <List.Item.Meta
                                     title={item.name}
                                     description={item.email}

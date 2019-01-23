@@ -16,3 +16,20 @@ export function queryList() {
                 console.log('error: ', err)
             });
 }
+
+export function deleteOne(id) {
+    return  fetch(`${serverIP}/friend?friendId=${id}`, {
+            method: 'DELETE',
+            mode: "cors",
+            headers: new Headers({
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')}),
+            }).then((res)=>{
+                return res.json()
+            }).then((res)=>{
+                console.log(res);
+                return res;
+            }).catch((err)=>{
+                console.log('error: ', err)
+            });
+}
