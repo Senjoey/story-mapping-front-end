@@ -20,6 +20,14 @@ export default {
                 {path: '/dashboard/storymapiingdetail', component: 'StoryMapping/StoryMappingDetail'},
                 {path: '/dashboard/storymapping', component: 'StoryMapping/StoryMappingOverview'},
                 {path: '/dashboard/friends', component: 'Friends/FriendsList'},
+                {
+                    path: '/dashboard/notification',
+                    component: 'Notification/Notification',
+                    routes: [
+                        {path: '/dashboard/notification/friends', component: 'Notification/FriendNotification'}
+                    ]
+
+                },
                 {path: '/dashboard/test', component: 'StoryMapping/StoryMappingDetail'}
             ]
         },

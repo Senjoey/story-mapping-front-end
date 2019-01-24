@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Menu, Icon, Spin, Dropdown, Avatar} from 'antd';
+import { Menu, Icon, Spin, Dropdown, Avatar, Badge} from 'antd';
 import styles from './index.less';
 
 export default class MyGlobalHeader extends PureComponent {
@@ -22,6 +22,10 @@ export default class MyGlobalHeader extends PureComponent {
         this.setState({
             current: e.key
         });
+    }
+
+    handleClickNotification() {
+        this.props.history.push('/dashboard/notification/friends');
     }
 
     render() {
@@ -48,11 +52,16 @@ export default class MyGlobalHeader extends PureComponent {
         return(
             <div className={styles.header}>
                 <div className={styles.right}>
+                    <div style={{marginRight: '15px', display: 'inline-block', cursor: 'pointer'}} >
+                        <Badge dot onClick={this.handleClickNotification.bind(this)}>
+                            <Icon type={'bell'} style={{fontSize: '18px'}}/>
+                        </Badge>
+                    </div>
                     {currentUser.name ? (
                         <Dropdown overlay={menu}>
                             <span className={`${styles.action} ${styles.account}`}>
                                 <Avatar size="middle" className={styles.avatar} src={currentUser.avatar} />
-                                <span className={styles.name}>{currentUser.name}</span>
+                                <span>{currentUser.name}</span>
                             </span>
                         </Dropdown>
                     ) : (

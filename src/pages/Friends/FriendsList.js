@@ -24,7 +24,73 @@ class FriendsListPage extends Component {
     }
 
     handleOK() {
+        this.setState({
+            confirmLoading: true,
+        });
+        this.props.form.validateFields((err, values) => {
+            if(!err) {
+                this.getFriendId(values.email);
+                let id = this.props.friendId;
+                console.log('传给add的参数: ', this.props.friendId);
+                this.props.dispatch({
+                    type: `${namespace}/addOne`,
+                    payload: id,
+                }).then((res) => {
+                    if(res.success) {
+                        this.setState({
+                            visible: false,
+                            confirmLoading: false,
+                        })
+                    } else {
+                        this.setState({
+                            visible: false,
+                            confirmLoading: false,
+                        });
+                        message.warn(res.message);
+                    }
+                });
+            }
+        });
+    }
 
+    handleOK() {
+        this.setState({
+            confirmLoading: true,
+        });
+        this.props.form.validateFields((err, values) => {
+            if(!err) {
+                this.props.dispatch({
+                    type: `${namespace}/queryIdByEmail`,
+                    payload: values.email,
+                }).then((res) => {
+                    if(res.success) {
+                        this.props.dispatch({
+                            type: `${namespace}/addOne`,
+                            payload: res.content[0].id,
+                        }).then((res) => {
+                            if(res.success) {
+                                this.setState({
+                                    visible: false,
+                                    confirmLoading: false,
+                                })
+                            } else {
+                                this.setState({
+                                    visible: false,
+                                    confirmLoading: false,
+                                });
+                                message.warn(res.message);
+                            }
+                        });
+                    } else {
+                        this.setState({
+                            visible: false,
+                            confirmLoading: false,
+                        });
+                        message.warn(res.message);
+                    }
+                });
+            }
+        });
     }
 
     handleCancel() {
@@ -40,7 +106,7 @@ class FriendsListPage extends Component {
     };
 
     deleteOne = (id) => {
-            this.props.dispatch({
+        this.props.dispatch({
             type: `${namespace}/deleteOne`,
             payload: id,
         }).then((res) => {
@@ -91,7 +157,7 @@ class FriendsListPage extends Component {
                                 >
                                     <Form>
                                         <Form.Item label="email">
-                                            {getFieldDecorator('title', {
+                                            {getFieldDecorator('email', {
                                                 rules: [{type: 'email', message: 'The input is not valid E-mail!',}],
                                             })(
                                                 <Input autoComplete="off"/>
@@ -111,7 +177,8 @@ class FriendsListPage extends Component {
 
 function mapStateToProps(state) {
     return {
-        friendsList: state.friendsList.friends,
+        friendsList: state[namespace].friends,
+        friendId: state[namespace].friendId,
     };
 }
 export default connect(mapStateToProps)(Form.create()(FriendsListPage));
