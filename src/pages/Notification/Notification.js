@@ -13,7 +13,7 @@ class Notification extends Component{
                         {this.props.children}
                     </Tabs.TabPane>
                     <Tabs.TabPane tab={'地图通知'} key={'maps'}>
-                        Content of maps
+                        notification of maps
                     </Tabs.TabPane>
                 </Tabs>
             </div>

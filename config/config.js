@@ -16,7 +16,6 @@ export default {
             path: '/dashboard',
             component: 'Dashboard/BasicLayout',
             routes: [
-                {path: '/dashboard', component: 'Dashboard/Analysis'},
                 {path: '/dashboard/storymapiingdetail', component: 'StoryMapping/StoryMappingDetail'},
                 {path: '/dashboard/storymapping', component: 'StoryMapping/StoryMappingOverview'},
                 {path: '/dashboard/friends', component: 'Friends/FriendsList'},
@@ -28,7 +27,6 @@ export default {
                     ]
 
                 },
-                {path: '/dashboard/test', component: 'StoryMapping/StoryMappingDetail'}
             ]
         },
         // User

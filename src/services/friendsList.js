@@ -28,7 +28,7 @@ export function queryIdByEmail(email) {
             }).then((res)=>{
                 return res.json()
             }).then((res)=>{
-                console.log(res);
+                console.log('queryIdByEmail',res);
                 return res;
             }).catch((err)=>{
                 console.log('error: ', err)

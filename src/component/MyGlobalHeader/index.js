@@ -1,15 +1,27 @@
 import React, { PureComponent } from 'react';
 import { Menu, Icon, Spin, Dropdown, Avatar, Badge} from 'antd';
+import Link from 'umi/link';
 import styles from './index.less';
+import { connect } from 'dva';
 
-export default class MyGlobalHeader extends PureComponent {
+class MyGlobalHeader extends PureComponent {
     constructor() {
         super();
         this.state = {
-            current: 'map'
+            current: 'map',
         }
 
     }
+    componentDidMount() {
+        this.queryList();
+    }
+
+    queryList = () => {
+        this.props.dispatch({
+            type: 'friendNotification/queryList',
+        });
+    };
+
     handleClickMap(e) {
         this.props.history.push('/dashboard/storymapping');
         this.setState({
@@ -49,11 +61,17 @@ export default class MyGlobalHeader extends PureComponent {
                 </Menu.Item>
             </Menu>
         );
+
         return(
             <div className={styles.header}>
+                <Link to="/dashboard/storymapping" className={styles.logo}>
+                    <span>
+                        Story Mapping Tool
+                    </span>
+                </Link>
                 <div className={styles.right}>
                     <div style={{marginRight: '15px', display: 'inline-block', cursor: 'pointer'}} >
-                        <Badge dot onClick={this.handleClickNotification.bind(this)}>
+                        <Badge dot={this.props.hasFriendNotification} onClick={this.handleClickNotification.bind(this)}>
                             <Icon type={'bell'} style={{fontSize: '18px'}}/>
                         </Badge>
                     </div>
@@ -72,3 +90,11 @@ export default class MyGlobalHeader extends PureComponent {
         );
     }
 }
+
+function mapStateToProps(state) {
+    return {
+        hasFriendNotification: state['friendNotification'].unreadNotification.length > 0,
+    }
+}
+
+export default connect(mapStateToProps)(MyGlobalHeader);

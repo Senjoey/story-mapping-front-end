@@ -1,5 +1,5 @@
 import React from 'react';
-import {Form, Button, Input} from 'antd';
+import {Form, Button, Input, message} from 'antd';
 import styles from './RegisterForm.less';
 import Link from 'umi/link';
 import {serverIP} from "../../../util/GlobalConstants";
@@ -22,9 +22,16 @@ class RegistrationForm extends React.Component {
                     }),
                     body: JSON.stringify(values)
                 }).then((res)=>{
-                    return res.json()
+                    return res.json();
                 }).then((res)=>{
-                    console.log(res)
+                    console.log(res);
+                    if (res.success) {
+                        message.success('注册成功！请查看您的邮箱进行验证');
+                        this.props.history.push('/');
+                    } else {
+                        message.warn(res.message);
+                    }
+
                 }).catch((err)=>{
                     console.log('error: ', err)
                 });

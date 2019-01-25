@@ -36,15 +36,20 @@ class FriendsListPage extends Component {
                          visible: false,
                          confirmLoading: false,
                      });
-                    if(res.success) {
+                    if(res.success && res.content.length) {
+                        console.log('before add one friend: ', res);
                         this.props.dispatch({
                             type: `${namespace}/addOne`,
                             payload: res.content[0].id,
                         }).then((res) => {
                             if(!res.success) {
                                message.warn(res.message);
+                            } else {
+                                message.success('已发送验证消息');
                             }
                         });
+                    } else if(res.success) {
+                        message.warn('请检查输入的邮箱');
                     } else {
                         message.warn(res.message);
                     }
