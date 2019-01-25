@@ -49,6 +49,9 @@ class FriendNotification extends Component{
     }
 
     render() {
+        if(!localStorage.getItem('token')) {
+            this.props.history.push('/');
+        }
         return(
             <Tabs defaultActiveKey={'friends-read'} tabPosition={'left'}>
                 <Tabs.TabPane tab={'未处理'} key={'friends-read'}>

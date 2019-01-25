@@ -40,6 +40,11 @@ class MyGlobalHeader extends PureComponent {
         this.props.history.push('/dashboard/notification/friends');
     }
 
+    handleClickLogout() {
+        localStorage.clear();
+        this.props.history.push('/');
+    }
+
     render() {
         const {
             currentUser = {},
@@ -56,7 +61,7 @@ class MyGlobalHeader extends PureComponent {
                 <Menu.Item key="person">
                     <Icon type="user" />个人中心
                 </Menu.Item>
-                <Menu.Item key="logout">
+                <Menu.Item key="logout" onClick={this.handleClickLogout.bind(this)}>
                     <Icon type="logout" />退出登录
                 </Menu.Item>
             </Menu>

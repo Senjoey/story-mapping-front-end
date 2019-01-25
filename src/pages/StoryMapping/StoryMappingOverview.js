@@ -98,6 +98,9 @@ class StoryMappingOverviewPage extends Component {
     };
 
     render() {
+        if(!localStorage.getItem('token')) {
+            this.props.history.push('/');
+        }
         const { visible, confirmLoading} = this.state;
         const { getFieldDecorator } = this.props.form;
 
