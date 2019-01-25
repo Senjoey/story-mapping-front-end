@@ -22,37 +22,6 @@ class FriendsListPage extends Component {
             visible: true,
         });
     }
-
-    handleOK() {
-        this.setState({
-            confirmLoading: true,
-        });
-        this.props.form.validateFields((err, values) => {
-            if(!err) {
-                this.getFriendId(values.email);
-                let id = this.props.friendId;
-                console.log('传给add的参数: ', this.props.friendId);
-                this.props.dispatch({
-                    type: `${namespace}/addOne`,
-                    payload: id,
-                }).then((res) => {
-                    if(res.success) {
-                        this.setState({
-                            visible: false,
-                            confirmLoading: false,
-                        })
-                    } else {
-                        this.setState({
-                            visible: false,
-                            confirmLoading: false,
-                        });
-                        message.warn(res.message);
-                    }
-                });
-            }
-        });
-    }
-
     handleOK() {
         this.setState({
             confirmLoading: true,
@@ -63,29 +32,20 @@ class FriendsListPage extends Component {
                     type: `${namespace}/queryIdByEmail`,
                     payload: values.email,
                 }).then((res) => {
+                     this.setState({
+                         visible: false,
+                         confirmLoading: false,
+                     });
                     if(res.success) {
                         this.props.dispatch({
                             type: `${namespace}/addOne`,
                             payload: res.content[0].id,
                         }).then((res) => {
-                            if(res.success) {
-                                this.setState({
-                                    visible: false,
-                                    confirmLoading: false,
-                                })
-                            } else {
-                                this.setState({
-                                    visible: false,
-                                    confirmLoading: false,
-                                });
-                                message.warn(res.message);
+                            if(!res.success) {
+                               message.warn(res.message);
                             }
                         });
                     } else {
-                        this.setState({
-                            visible: false,
-                            confirmLoading: false,
-                        });
                         message.warn(res.message);
                     }
                 });
@@ -114,7 +74,7 @@ class FriendsListPage extends Component {
                 message.success('删除成功');
                 this.queryList();
             } else {
-                alert(res.content);
+                alert(res.message);
             }
         });
     };
@@ -146,7 +106,7 @@ class FriendsListPage extends Component {
                         ) : (
                             <List.Item>
                                 <Button type="dashed" className={styles.newButton} onClick={this.showModal.bind(this)}>
-                                    <Icon type="plus"/>添加好友
+                                    <Icon type="user-add"/>添加好友
                                 </Button>
                                 <Modal
                                     title="添加好友"
@@ -154,6 +114,8 @@ class FriendsListPage extends Component {
                                     onOk={this.handleOK.bind(this)}
                                     onCancel={this.handleCancel.bind(this)}
                                     confirmLoading={confirmLoading}
+                                    okText="确认"
+                                    cancelText="取消"
                                 >
                                     <Form>
                                         <Form.Item label="email">

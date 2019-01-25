@@ -1,91 +1,63 @@
 import React, { Component } from 'react';
-import { Card, List, Button, Icon, Menu, Dropdown, Modal, message, Form, Input} from 'antd';
+import { Card, List, Button, Icon, Menu, Dropdown, Modal, message, Form, Input, Select} from 'antd';
 import styles from './StoryMappingOverview.less';
-import {translateTimestampToTime} from '../../util/DateUtil'
-import {serverIP} from "../../util/GlobalConstants";
+import { connect } from 'dva';
+
+const namespace = 'storyMapList';
 
 class StoryMappingOverviewPage extends Component {
     constructor() {
         super();
         this.state = {
-            createMapList: [
-                {
-                    id: '1',
-                    title: 'StoryMappingTool',
-                    createTime: 'null'
-                },
-            ],
             visible: false,
             confirmLoading: false,
-        }
+            collaboratorsSelected: [],
+        };
     }
-    componentWillMount () {
-        this._getMapList();
+
+    componentDidMount() {
+        this.queryList();
     }
-    _getMapList = ()=> {
-        let createMapList = [];
-        let memberMapList = [];
-        fetch(`${serverIP}/map`, {
-                    method: 'GET',
-                    mode: "cors",
-                    headers: new Headers({
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                    }),
-                }).then((res)=>{
-                    return res.json()
-                }).then((res)=>{
-                    console.log(res);
-                    createMapList = res.content.createMapList.map(item =>{
-                        return {
-                            title: item.title,
-                            createTime: translateTimestampToTime(new Date(item.createTime)),
-                            id: item.id
-                        }
-                    });
-                    memberMapList = res.content.memberMapList;
-                    this.setState({createMapList: createMapList, memberMapList: memberMapList})
-                }).catch((err)=>{
-                    console.log('error: ', err)
-                });
+
+    queryList = () => {
+        this.props.dispatch({
+            type: `${namespace}/queryList`,
+        });
     };
+
     showModal() {
+        this.props.dispatch({
+            type: 'friendsList/queryList',
+        });
+
         this.setState({
             visible: true,
         });
     }
     handleOk(){
-        let createMapList = this.state.createMapList;
         this.setState({
             confirmLoading: true,
         });
         this.props.form.validateFields((err, values) => {
             if(!err) {
                 console.log('Received values of form: ', values);
-                fetch(`${serverIP}/map`, {
-                    method: 'POST',
-                    mode: "cors",
-                    headers: new Headers({
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                    }),
-                    body: JSON.stringify(values)
-                }).then((res)=>{
-                    return res.json()
-                }).then((res)=>{
-                    console.log(res);
-                    createMapList.push({
-                        title: res.content.title,
-                        createTime: translateTimestampToTime(res.content.createTime),
-                        id: res.content.id
-                    });
+                this.props.dispatch({
+                    type: `${namespace}/addOne`,
+                    payload: {
+                        title: values.title,
+                        memberList: this.state.collaboratorsSelected
+                    },
+                }).then((res) => {
                     this.setState({
-                        createMapList: createMapList,
                         visible: false,
                         confirmLoading: false,
-                    })
-                }).catch((err)=>{
-                    console.log('error: ', err)
+                    });
+                    if(res.success) {
+                        this.queryList();
+
+                    } else {
+                        alert(res.message);
+                    }
                 });
             }
         });
@@ -97,22 +69,16 @@ class StoryMappingOverviewPage extends Component {
         });
     }
     handleMapDelete(mapID) {
-        fetch(`${serverIP}/map?mapId=${mapID}`, {
-            method: 'DELETE',
-            mode: "cors",
-            headers: new Headers({
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
-            }),
-        }).then((res)=>{
-            return res.json()
-        }).then((res)=>{
-            console.log(res);
+        this.props.dispatch({
+            type: `${namespace}/deleteOne`,
+            payload: mapID,
+        }).then((res) => {
             if(res.success) {
-                this._getMapList();
+                message.success('删除成功');
+                this.queryList();
+            } else {
+                alert(res.message);
             }
-        }).catch((err)=>{
-            console.log('error: ', err)
         });
     }
 
@@ -127,43 +93,35 @@ class StoryMappingOverviewPage extends Component {
         this.props.history.push('/dashboard/storymapiingdetail');
     }
 
+    handleCollaboratorsChange = collaboratorsSelected => {
+        this.setState({ collaboratorsSelected });
+    };
+
     render() {
-        // const menu = (
-        //     <Menu className={styles.menu}>
-        //         <Menu.Item onClick={()=>console.log()}><Icon type="edit" />修改</Menu.Item>
-        //         <Menu.Item onClick={this.handleMapDelete.bind(this)}><Icon type="minus" />删除</Menu.Item>
-        //     </Menu>
-        // );
-        // const dropdownGroup = (
-        //     <span className={styles.iconGroup}>
-        //         <Dropdown overlay={menu} placement="bottomRight">
-        //             <Icon type="ellipsis" />
-        //         </Dropdown>
-        //     </span>
-        // );
         const { visible, confirmLoading} = this.state;
         const { getFieldDecorator } = this.props.form;
+
         return(
             <div style={{maxWidth: "1200px", margin:"0 auto"}}>
+                <h1>我创建的</h1>
                 <div className={styles.cardList}>
                     <List
                         rowKey="id"
                         grid={{ gutter: 24, column: 3, lg: 3, md: 2, sm: 1, xs: 1 }}
-                        dataSource={['', ...this.state.createMapList]}
+                        dataSource={['', ...this.props.createMapList]}
                         renderItem={item =>
                             item ? (
                                 <List.Item>
                                     <Card
                                         hoverable
                                         title={item.title}
-                                        onClick={this.handleMapDetailInfo.bind(this, item.id)}
-                                        // extra={dropdownGroup}
                                         extra={
                                             <span className={styles.iconGroup}>
                                                 <Dropdown placement="bottomRight" overlay={
                                                     <Menu className={styles.menu}>
+                                                        <Menu.Item onClick={this.handleMapDetailInfo.bind(this, item.id)}><Icon type="file" />查看</Menu.Item>
                                                         <Menu.Item onClick={this.handleMapEdit.bind(this, item.id)}><Icon type="edit" />修改</Menu.Item>
-                                                        <Menu.Item onClick={this.handleMapDelete.bind(this, item.id)}><Icon type="minus" />删除</Menu.Item>
+                                                        <Menu.Item onClick={this.handleMapDelete.bind(this, item.id)}><Icon type="delete" />删除</Menu.Item>
                                                     </Menu>
                                                 }>
                                                     <Icon type="ellipsis" />
@@ -186,17 +144,67 @@ class StoryMappingOverviewPage extends Component {
                                         onOk={this.handleOk.bind(this)}
                                         confirmLoading={confirmLoading}
                                         onCancel={this.handleCancel.bind(this)}
+                                        okText="确认"
+                                        cancelText="取消"
                                     >
                                         <Form>
                                             <Form.Item label="标题">
                                                 {getFieldDecorator('title', {
-                                                    rules: [{ required: true }],
+                                                    rules: [],
                                                 })(
                                                     <Input autoComplete="off"/>
                                                 )}
                                             </Form.Item>
-                                        </Form>
+
+                                            <Form.Item label={'协作者'}>
+                                                <Select
+                                                    mode="multiple"
+                                                    placeholder="请选择协作者"
+                                                    onChange={this.handleCollaboratorsChange}
+                                                >
+                                                    {
+                                                        this.props.friendsList.map(item => (
+                                                            <Select.Option key={item.id}>
+                                                                {`${item.name} ${item.email}`}
+                                                            </Select.Option>
+                                                        ))
+                                                    }
+                                                </Select>
+                                            </Form.Item>
+                                            </Form>
                                     </Modal>
+                                </List.Item>
+                            )
+                        }
+                    />
+                    <h1>我参与的</h1>
+                    <List
+                        rowKey="id"
+                        grid={{ gutter: 24, column: 3, lg: 3, md: 2, sm: 1, xs: 1 }}
+                        dataSource={[...this.props.memberMapList]}
+                        renderItem={item =>
+                             (
+                                <List.Item>
+                                    <Card
+                                        hoverable
+                                        title={item.title}
+                                        extra={
+                                            <span className={styles.iconGroup}>
+                                                <Dropdown placement="bottomRight" overlay={
+                                                    <Menu className={styles.menu}>
+                                                        <Menu.Item onClick={this.handleMapDetailInfo.bind(this, item.id)}><Icon type="file" />查看</Menu.Item>
+                                                        <Menu.Item onClick={this.handleMapEdit.bind(this, item.id)}><Icon type="edit" />修改</Menu.Item>
+                                                        <Menu.Item onClick={this.handleMapDelete.bind(this, item.id)}><Icon type="delete" />删除</Menu.Item>
+                                                    </Menu>
+                                                }>
+                                                    <Icon type="ellipsis" />
+                                                </Dropdown>
+                                            </span>
+                                        }
+                                    >
+                                        <p>创建时间: {item.createTime}</p>
+                                        <p>ID: {item.id}</p>
+                                    </Card>
                                 </List.Item>
                             )
                         }
@@ -206,4 +214,12 @@ class StoryMappingOverviewPage extends Component {
         );
     }
 }
-export default Form.create()(StoryMappingOverviewPage);
+
+function mapStateToProps(state) {
+    return {
+        friendsList: state['friendsList'].friends,
+        createMapList: state[namespace].createMapList,
+        memberMapList: state[namespace].memberMapList,
+    };
+}
+export default connect(mapStateToProps)(Form.create()(StoryMappingOverviewPage));

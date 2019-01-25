@@ -81,8 +81,8 @@ class FriendNotification extends Component{
                             renderItem={ item => (
                                 <List.Item actions={ [this.getTagByStatus(item.status, item.invitationId)] }>
                                     <List.Item.Meta
-                                        title={`${item.receiverName} ${item.receiverEmail}`}
-                                        description={'请求添加其为好友'}
+                                        title={`${item.senderName} ${item.senderEmail}`}
+                                        description={'请求添加好友'}
                                     />
                                 </List.Item>
                             )}

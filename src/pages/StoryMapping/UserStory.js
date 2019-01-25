@@ -131,6 +131,8 @@ class UserStory extends Component {
                     onOk={this.handleOk.bind(this)}
                     confirmLoading={confirmLoading}
                     onCancel={this.handleCancel.bind(this)}
+                    okText="确认"
+                    cancelText="取消"
                 >
                     <Form>
                         <Form.Item label="标题">

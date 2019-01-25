@@ -183,6 +183,8 @@ class StoryMappingDetailInfo extends Component{
                         onOk={this.handleOk.bind(this)}
                         confirmLoading={confirmLoading}
                         onCancel={this.handleCancel.bind(this)}
+                        cancelText="取消"
+                        okText="确认"
                     >
                         <Form>
                             <Form.Item label="标题">
