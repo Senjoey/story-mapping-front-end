@@ -22,6 +22,14 @@ export default {
                     ]
 
                 },
+                {
+                    path: '/dashboard/personinfo',
+                    component: 'PersonInfo/PersonInfo',
+                    routes: [
+                        {path: '/dashboard/personinfo/nickname', component: 'PersonInfo/Nickname'},
+                    ]
+
+                },
             ]
         },
         // User

@@ -2,9 +2,10 @@ import React from 'react';
 import {Layout} from 'antd';
 import MyGlobalHeader from "../../component/MyGlobalHeader/index";
 import styles from './BasicLayout.less';
-import {serverIP} from "../../util/GlobalConstants";
+import { connect } from 'dva';
 
 const {Header, Content} = Layout;
+const namespace = 'userInfo';
 
 class BasicDashBoardLayout extends React.Component {
     constructor() {
@@ -19,23 +20,9 @@ class BasicDashBoardLayout extends React.Component {
         this._getUserInfo();
     }
     _getUserInfo = () => {
-        let userInfo = {};
-        fetch(`${serverIP}/user/info`, {
-                    method: 'GET',
-                    mode: "cors",
-                    headers: new Headers({
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                    }),
-                }).then((res)=>{
-                    return res.json()
-                }).then((res)=>{
-                    console.log(res);
-                    userInfo = res.content;
-                    this.setState({userInfo: userInfo})
-                }).catch((err)=>{
-                    console.log('error: ', err)
-                });
+        this.props.dispatch({
+            type: `${namespace}/queryUserInfo`,
+        });
     };
     render () {
         return (
@@ -43,7 +30,7 @@ class BasicDashBoardLayout extends React.Component {
                 <Header className={styles["override-ant-layout-header"]}>
                     <MyGlobalHeader
                         currentUser={{
-                          name: this.state.userInfo.name,
+                          name: this.props.userInfo.name,
                           avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
                         }}
                         history={this.props.history}
@@ -59,5 +46,9 @@ class BasicDashBoardLayout extends React.Component {
         );
     }
 }
-
-export default BasicDashBoardLayout;
+function mapStateToProps(state) {
+    return {
+        userInfo: state[namespace].userInfo,
+    };
+}
+export default connect(mapStateToProps)(BasicDashBoardLayout);

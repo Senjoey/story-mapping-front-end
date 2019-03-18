@@ -53,19 +53,19 @@ class LoginForm extends  React.Component {
                 <Form.Item>
                 {getFieldDecorator('email', {
                         rules: [{
-                            type: 'email', message: 'The input is not valid E-mail!',
+                            type: 'email', message: '邮箱格式错误',
                         }, {
-                            required: true, message: 'Please input your E-mail!',
+                            required: true, message: '请输入您的邮箱',
                         }],
                 })(
-                    <Input prefix={<Icon type="mail" className={styles["login-input"]} />} placeholder="Email"/>
+                    <Input prefix={<Icon type="mail" className={styles["login-input"]} />} placeholder="邮箱"/>
                 )}
                 </Form.Item>
                 <Form.Item>
                 {getFieldDecorator('password', {
-                    rules: [{ required: true, message: 'Please input your Password!' }],
+                    rules: [{ required: true, message: '请输入您的密码' }],
                 })(
-                    <Input prefix={<Icon type="lock" className={styles["login-input"]} />} type="password" placeholder="Password"/>
+                    <Input prefix={<Icon type="lock" className={styles["login-input"]} />} type="password" placeholder="密码"/>
                 )}
                 </Form.Item>
                 <Form.Item>

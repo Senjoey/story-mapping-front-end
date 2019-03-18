@@ -40,6 +40,10 @@ class MyGlobalHeader extends PureComponent {
         this.props.history.push('/dashboard/notification/friends');
     }
 
+    handleClickPersonInfo() {
+        this.props.history.push('/dashboard/personinfo/nickname');
+    }
+
     handleClickLogout() {
         localStorage.clear();
         this.props.history.push('/');
@@ -58,7 +62,7 @@ class MyGlobalHeader extends PureComponent {
                     <Icon type="team" />好友管理
                 </Menu.Item>
                 <Menu.Divider />
-                <Menu.Item key="person">
+                <Menu.Item key="person" onClick={this.handleClickPersonInfo.bind(this)}>
                     <Icon type="user" />个人中心
                 </Menu.Item>
                 <Menu.Item key="logout" onClick={this.handleClickLogout.bind(this)}>
@@ -88,7 +92,7 @@ class MyGlobalHeader extends PureComponent {
                             </span>
                         </Dropdown>
                     ) : (
-                        <Spin size="middle" style={{ marginLeft: 8 }} />
+                        <Spin size="default" style={{ marginLeft: 8 }} />
                     )}
                 </div>
             </div>

@@ -51,7 +51,7 @@ class RegistrationForm extends React.Component {
                     >
                     {getFieldDecorator('email', {
                         rules: [{
-                            type: 'email', message: 'The input is not valid E-mail!',
+                            type: 'email', message: '邮箱格式错误',
                         }],
                     })(
                     <Input autoComplete="off"/>
