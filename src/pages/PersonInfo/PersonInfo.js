@@ -1,23 +1,22 @@
 import React, { Component } from 'react';
 import {Tabs} from 'antd';
 import { connect } from 'dva';
+import {serverIP} from "../../util/GlobalConstants";
 
 class PersonInfo extends Component{
     static TabPane = Tabs.TabPane;
 
-    handleTabClick(){
-        this.forceUpdate();
-    }
-
     render() {
         return(
             <div style={{margin: '128px'}}>
-                <Tabs defaultActiveKey={'info'} tabPosition={'left'} >
-                    <Tabs.TabPane tab={'个人信息'} key={'info'} forceRender={true}>
+                <Tabs defaultActiveKey={'nickname'} tabPosition={'left'}
+                      onChange={(activeKey)=>{this.props.history.push(`/dashboard/personinfo/${activeKey}`);}}
+                >
+                    <Tabs.TabPane tab={'个人信息'} key={'nickname'}>
                         {this.props.children}
                     </Tabs.TabPane>
                     <Tabs.TabPane tab={'修改密码'} key={'password'}>
-                        notification of maps
+                        {this.props.children}
                     </Tabs.TabPane>
                 </Tabs>
             </div>
