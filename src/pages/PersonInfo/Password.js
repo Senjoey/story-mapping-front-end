@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Divider, Form, Input, Button, message } from 'antd';
 import styles from './NickName.less';
-import {serverIP} from "../../util/GlobalConstants";
 
 const namespace = 'userInfo';
 
@@ -12,6 +11,21 @@ class Password extends Component{
         this.props.form.validateFields((err, values) => {
             if(!err) {
                //TODO 调用后端接口
+                this.props.dispatch({
+                    type: `${namespace}/updatePassword`,
+                    payload: {
+                        oldPassword: values.originalPassword,
+                        newPassword: values.newPassword
+                    },
+                }).then((res) => {
+                    if(res.success) {
+                        message.success('密码更新成功，请重新登录');
+                        localStorage.clear();
+                        this.props.history.push('/');
+                    } else {
+                        message.error(res.message);
+                    }
+                });
             }
         });
     }

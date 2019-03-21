@@ -10,12 +10,21 @@ export default {
         {
             path: '/dashboard',
             component: 'Dashboard/BasicLayout',
+            // isExact: true,
             routes: [
-                {path: '/dashboard/storymapiingdetail', component: 'StoryMapping/StoryMappingDetail'},
+                {path: '/dashboard/storymapiingdetail/:mapID', component: 'StoryMapping/StoryMappingDetail'},
+                {
+                    path: '/dashboard/storymapiinginfoedit/:mapID',
+                    component: 'StoryMapping/StoryMappingInfoEdit/StoryMappingInfoEdit',
+                    routes: [
+                        {path: '/dashboard/storymapiinginfoedit/:mapID/info', component: 'StoryMapping/StoryMappingInfoEdit/MapInfo'},
+                        {path: '/dashboard/storymapiinginfoedit/:mapID/collaborator', component: 'StoryMapping/StoryMappingInfoEdit/MapCollaborator'},
+                    ]
+                },
                 {path: '/dashboard/storymapping', component: 'StoryMapping/StoryMappingOverview'},
                 {path: '/dashboard/friends', component: 'Friends/FriendsList'},
                 {
-                    path: '/dashboard/notification',
+                    path: '/dashboard/notification/',
                     component: 'Notification/Notification',
                     routes: [
                         {path: '/dashboard/notification/friends', component: 'Notification/FriendNotification'}

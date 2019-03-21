@@ -18,6 +18,10 @@ export default {
             const rsp = yield call(userInfoService.updateInfo, payload);
             return rsp;
         },
+        *updatePassword({ payload }, { call, put }) {
+            const rsp = yield call(userInfoService.updatePassword, payload);
+            return rsp;
+        },
 
     },
 

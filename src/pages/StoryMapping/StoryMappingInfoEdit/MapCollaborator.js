@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import {List, Icon, Button, Modal, Form, Input, message, Popconfirm} from 'antd';
-import styles from './FriendsList.less';
+import styles from '../../Friends/FriendsList.less';
 import { connect } from 'dva';
 
 const namespace = 'friendsList';
 
-class FriendsListPage extends Component {
+class MapCollaborator extends Component {
     constructor() {
         super();
         this.state = {
@@ -91,15 +91,15 @@ class FriendsListPage extends Component {
         const { getFieldDecorator } = this.props.form;
 
         return(
-            <div style={{padding: '64px 256px',}}>
-                <h1>好友列表</h1>
+            <div style={{width: '70%'}}>
+                <h2>协作者列表</h2>
                 <List
                     dataSource={['', ...this.props.friendsList]}
                     renderItem={ item =>
                         item ? (
                             <List.Item actions={[
                                 <Popconfirm
-                                    title="确认删除该好友吗？" okText="确认" cancelText="取消"
+                                    title="确认删除该协作者吗？" okText="确认" cancelText="取消"
                                     onConfirm={() => this.deleteOne(item.id)}
                                     placement="topRight"
                                 >
@@ -114,10 +114,10 @@ class FriendsListPage extends Component {
                         ) : (
                             <List.Item>
                                 <Button type="dashed" className={styles.newButton} onClick={this.showModal.bind(this)}>
-                                    <Icon type="user-add"/>添加好友
+                                    <Icon type="user-add"/>添加协作者
                                 </Button>
                                 <Modal
-                                    title="添加好友"
+                                    title="添加协作者"
                                     visible={visible}
                                     onOk={this.handleOK.bind(this)}
                                     onCancel={this.handleCancel.bind(this)}
@@ -151,4 +151,4 @@ function mapStateToProps(state) {
         friendId: state[namespace].friendId,
     };
 }
-export default connect(mapStateToProps)(Form.create()(FriendsListPage));
+export default connect(mapStateToProps)(Form.create()(MapCollaborator));

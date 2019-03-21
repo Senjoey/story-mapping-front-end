@@ -43,6 +43,14 @@ export default {
             const rsp = yield call(storyMapListService.deleteOne, payload);
             return rsp;
         },
+        *queryOne({ payload }, { call, put }) {
+            const rsp = yield call(storyMapListService.queryOne, payload);
+            return rsp;
+        },
+        *updateTitle({ payload }, { call, put }) {
+            const rsp = yield call(storyMapListService.updateTitle, payload);
+            return rsp;
+        },
     },
 
     reducers: {

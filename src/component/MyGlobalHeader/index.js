@@ -36,12 +36,18 @@ class MyGlobalHeader extends PureComponent {
         });
     }
 
-    handleClickNotification() {
+    handleClickNotification(e) {
         this.props.history.push('/dashboard/notification/friends');
+        this.setState({
+            current: e.key
+        });
     }
 
-    handleClickPersonInfo() {
+    handleClickPersonInfo(e) {
         this.props.history.push('/dashboard/personinfo/nickname');
+        this.setState({
+            current: e.key
+        });
     }
 
     handleClickLogout() {

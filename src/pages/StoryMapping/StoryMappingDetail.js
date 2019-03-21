@@ -18,8 +18,10 @@ class StoryMappingDetailInfo extends Component{
     }
 
     componentWillMount () {
-        this._getMapOverviewInfo(localStorage.getItem('mapID'));
-        this._getMapDetailInfo(localStorage.getItem('mapID'))
+        // this._getMapOverviewInfo(localStorage.getItem('mapID'));
+        this._getMapOverviewInfo(this.props.match.params.mapID);
+        // this._getMapDetailInfo(localStorage.getItem('mapID'))
+        this._getMapDetailInfo(this.props.match.params.mapID)
     }
 
     _getMapOverviewInfo(mapID) {

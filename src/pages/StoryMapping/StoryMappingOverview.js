@@ -40,7 +40,8 @@ class StoryMappingOverviewPage extends Component {
         });
         this.props.form.validateFields((err, values) => {
             if(!err) {
-                console.log('Received values of form: ', values);
+                console.log('新增地图Received values of form: ', values);
+                // 传入的collaborator的是id
                 this.props.dispatch({
                     type: `${namespace}/addOne`,
                     payload: {
@@ -84,13 +85,12 @@ class StoryMappingOverviewPage extends Component {
 
     handleMapEdit(mapID) {
         //TODO 还需要完善修改故事地图信息
-        message.success(`当前ID: ${mapID}`);
+        this.props.history.push(`/dashboard/storymapiinginfoedit/${mapID}/info`);
     }
 
     handleMapDetailInfo(mapID) {
-        //TODO 跳转到地图详情页面
-        localStorage.setItem('mapID', mapID);
-        this.props.history.push('/dashboard/storymapiingdetail');
+        // localStorage.setItem('mapID', mapID);
+        this.props.history.push(`/dashboard/storymapiingdetail/${mapID}`);
     }
 
     handleCollaboratorsChange = collaboratorsSelected => {

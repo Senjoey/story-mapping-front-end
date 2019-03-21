@@ -36,3 +36,24 @@ export function updateInfo({name}) {
             });
 }
 
+export function updatePassword({oldPassword, newPassword}) {
+    return  fetch(`${serverIP}/user/password`, {
+            method: 'PUT',
+            mode: "cors",
+            headers: new Headers({
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')}),
+            body: JSON.stringify({
+                oldPassword: oldPassword,
+                newPassword: newPassword
+            }),
+            }).then((res)=>{
+                return res.json()
+            }).then((res)=>{
+                console.log('更新密码: ', res);
+                return res;
+            }).catch((err)=>{
+                console.log('error: ', err)
+            });
+}
+

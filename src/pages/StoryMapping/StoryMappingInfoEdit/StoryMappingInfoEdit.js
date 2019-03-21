@@ -2,19 +2,21 @@ import React, { Component } from 'react';
 import {Tabs} from 'antd';
 import { connect } from 'dva';
 
-class PersonInfo extends Component{
+class StoryMappingInfoEdit extends Component{
     static TabPane = Tabs.TabPane;
 
     render() {
+        let mapID = this.props.match.params.mapID;
+
         return(
             <div style={{margin: '128px'}}>
-                <Tabs defaultActiveKey={'nickname'} tabPosition={'left'}
-                      onChange={(activeKey)=>{this.props.history.push(`/dashboard/personinfo/${activeKey}`);}}
+                <Tabs defaultActiveKey={'info'} tabPosition={'left'}
+                      onChange={(activeKey)=>{this.props.history.push(`/dashboard/storymapiinginfoedit/${mapID}/${activeKey}`);}}
                 >
-                    <Tabs.TabPane tab={'个人信息'} key={'nickname'}>
+                    <Tabs.TabPane tab={'基本信息'} key={'info'}>
                         {this.props.children}
                     </Tabs.TabPane>
-                    <Tabs.TabPane tab={'修改密码'} key={'password'}>
+                    <Tabs.TabPane tab={'协作者'} key={'collaborator'}>
                         {this.props.children}
                     </Tabs.TabPane>
                 </Tabs>
@@ -30,4 +32,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps)(PersonInfo);
+export default connect(mapStateToProps)(StoryMappingInfoEdit);
