@@ -1,5 +1,6 @@
 import * as storyMapListService from '../services/storyMapList';
 import {translateTimestampToTime} from "../util/DateUtil";
+import * as friendsService from "../services/friendsList";
 
 export default {
     namespace: 'storyMapList',
@@ -51,6 +52,18 @@ export default {
             const rsp = yield call(storyMapListService.updateTitle, payload);
             return rsp;
         },
+        *queryCollaboratorList( {payload} , { call, put }) {
+            const rsp = yield call(storyMapListService.queryCollaboratorList, payload);
+            yield put({ type: 'saveCollaboratorList', payload: { collaborators: rsp.content }});
+        },
+        *deleteCollaborator({ payload }, { call, put }) {
+            const rsp = yield call(storyMapListService.deleteCollaborator, payload);
+            return rsp;
+        },
+        *addCollaborators({ payload }, { call, put }) {
+            const rsp = yield call(storyMapListService.addCollaborators, payload);
+            return rsp;
+        },
     },
 
     reducers: {
@@ -59,6 +72,12 @@ export default {
                 ...state,
                 createMapList,
                 memberMapList,
+            }
+        },
+        saveCollaboratorList(state, { payload: { collaborators } }) {
+            return {
+                ...state,
+                collaborators,
             }
         },
     }

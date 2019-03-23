@@ -164,6 +164,7 @@ class StoryMappingOverviewPage extends Component {
                                                     mode="multiple"
                                                     placeholder="请选择协作者"
                                                     onChange={this.handleCollaboratorsChange}
+
                                                 >
                                                     {
                                                         this.props.friendsList.map(item => (

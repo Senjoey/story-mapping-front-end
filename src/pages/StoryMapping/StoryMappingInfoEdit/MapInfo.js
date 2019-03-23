@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Divider, Form, Input, Button } from 'antd';
+import { Divider, Form, Input, Button, message } from 'antd';
 
 const namespace = 'storyMapList';
 

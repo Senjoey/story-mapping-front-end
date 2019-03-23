@@ -74,8 +74,6 @@ export function queryOne({mapID}) {
 
 
 export function updateTitle({mapID, title}) {
-    alert(mapID);
-    alert(title);
     return  fetch(`${serverIP}/map`, {
             method: 'PUT',
             mode: "cors",
@@ -83,7 +81,7 @@ export function updateTitle({mapID, title}) {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')}),
             body: JSON.stringify({
-                mapID: mapID,
+                mapId: mapID,
                 title: title
             }),
             }).then((res)=>{
@@ -95,3 +93,63 @@ export function updateTitle({mapID, title}) {
                 console.log('error: ', err)
             });
 }
+
+export function queryCollaboratorList({mapID}) {
+    return  fetch(`${serverIP}/mapMember/${mapID}`, {
+            method: 'GET',
+            mode: "cors",
+            headers: new Headers({
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')}),
+            }).then((res)=>{
+                return res.json()
+            }).then((res)=>{
+                console.log('获取协作者: ', res);
+                return res;
+            }).catch((err)=>{
+                console.log('error: ', err)
+            });
+}
+
+export function deleteCollaborator({mapID, deleteUserID}) {
+    return  fetch(`${serverIP}/mapMember`, {
+            method: 'DELETE',
+            mode: "cors",
+            headers: new Headers({
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')}),
+            body: JSON.stringify({
+                mapId: mapID,
+                deleteUserId: deleteUserID
+            }),
+            }).then((res)=>{
+                return res.json()
+            }).then((res)=>{
+                console.log('删除协作者：', res);
+                return res;
+            }).catch((err)=>{
+                console.log('error: ', err)
+            });
+}
+
+export function addCollaborators({mapID, memberIDList}) {
+    return  fetch(`${serverIP}/mapMember`, {
+            method: 'POST',
+            mode: "cors",
+            headers: new Headers({
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')}),
+            body: JSON.stringify({
+                mapId: mapID,
+                memberIdList: memberIDList
+            })
+            }).then((res)=>{
+                return res.json()
+            }).then((res)=>{
+                console.log('增加新的协作者: ', res);
+                return res;
+            }).catch((err)=>{
+                console.log('error: ', err)
+            });
+}
+

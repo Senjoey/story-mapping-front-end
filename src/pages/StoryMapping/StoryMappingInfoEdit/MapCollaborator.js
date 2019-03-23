@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import {List, Icon, Button, Modal, Form, Input, message, Popconfirm} from 'antd';
+import {List, Icon, Button, Modal, Form, Select, message, Popconfirm} from 'antd';
 import styles from '../../Friends/FriendsList.less';
 import { connect } from 'dva';
 
-const namespace = 'friendsList';
+const namespace = 'storyMapList';
 
 class MapCollaborator extends Component {
     constructor() {
@@ -11,10 +11,23 @@ class MapCollaborator extends Component {
         this.state = {
             visible: false,
             confirmLoading: false,
+            collaboratorsSelected: [],
         };
     }
     componentDidMount() {
-        this.queryList();
+        this._queryCollaboratorList();
+        this.props.dispatch({
+            type: 'friendsList/queryList',
+        });
+    }
+
+    _queryCollaboratorList() {
+         this.props.dispatch({
+            type: `${namespace}/queryCollaboratorList`,
+            payload: {
+                mapID: this.props.match.params.mapID,
+            },
+        });
     }
 
     showModal() {
@@ -26,36 +39,24 @@ class MapCollaborator extends Component {
         this.setState({
             confirmLoading: true,
         });
-        this.props.form.validateFields((err, values) => {
-            if(!err) {
-                this.props.dispatch({
-                    type: `${namespace}/queryIdByEmail`,
-                    payload: values.email,
-                }).then((res) => {
-                     this.setState({
-                         visible: false,
-                         confirmLoading: false,
-                     });
-                    if(res.success && res.content.length) {
-                        console.log('before add one friend: ', res);
-                        this.props.dispatch({
-                            type: `${namespace}/addOne`,
-                            payload: res.content[0].id,
-                        }).then((res) => {
-                            if(!res.success) {
-                               message.warn(res.message);
-                            } else {
-                                message.success('已发送验证消息');
-                            }
-                        });
-                    } else if(res.success) {
-                        message.warn('请检查输入的邮箱');
-                    } else {
-                        message.warn(res.message);
-                    }
-                });
-            }
-        });
+         this.props.dispatch({
+             type: `${namespace}/addCollaborators`,
+             payload: {
+                 mapID: this.props.match.params.mapID,
+                 memberIDList: this.state.collaboratorsSelected
+             },
+         }).then((res) => {
+             this.setState({
+                 visible: false,
+                 confirmLoading: false,
+             });
+             if(res.success) {
+                 this._queryCollaboratorList();
+             } else {
+                 alert(res.message);
+             }
+         });
+
     }
 
     handleCancel() {
@@ -64,37 +65,48 @@ class MapCollaborator extends Component {
         });
     }
 
-    queryList = () => {
-        this.props.dispatch({
-            type: `${namespace}/queryList`,
-        });
-    };
-
     deleteOne = (id) => {
         this.props.dispatch({
-            type: `${namespace}/deleteOne`,
-            payload: id,
+            type: `${namespace}/deleteCollaborator`,
+            payload: {
+                mapID: this.props.match.params.mapID,
+                deleteUserID: id
+            },
         }).then((res) => {
             if(res.success) {
                 message.success('删除成功');
-                this.queryList();
+                this._queryCollaboratorList();
             } else {
                 alert(res.message);
             }
         });
     };
+
+    handleCollaboratorsChange = collaboratorsSelected => {
+        this.setState({ collaboratorsSelected });
+    };
+
+    _getPossibleCollaborators() {
+        let length = this.props.collaborators ? this.props.collaborators.length : 0;
+        let ids = [];
+        for(let i = 0; i < length; i++) {
+            ids.push(this.props.collaborators[i].id)
+        }
+        let possibleCollaborators = this.props.friendsList.filter(item => !ids.includes(item.id)) || [];
+        return possibleCollaborators || [];
+    }
+
     render() {
         if(!localStorage.getItem('token')) {
             this.props.history.push('/');
         }
+        let possibleCollaborators = this._getPossibleCollaborators();
         const { visible, confirmLoading} = this.state;
-        const { getFieldDecorator } = this.props.form;
-
         return(
             <div style={{width: '70%'}}>
                 <h2>协作者列表</h2>
                 <List
-                    dataSource={['', ...this.props.friendsList]}
+                    dataSource={['', ...(this.props.collaborators || [])]}
                     renderItem={ item =>
                         item ? (
                             <List.Item actions={[
@@ -124,14 +136,24 @@ class MapCollaborator extends Component {
                                     confirmLoading={confirmLoading}
                                     okText="确认"
                                     cancelText="取消"
+                                    destroyOnClose={true}
                                 >
                                     <Form>
-                                        <Form.Item label="邮箱">
-                                            {getFieldDecorator('email', {
-                                                rules: [{type: 'email', message: '邮箱无效',}],
-                                            })(
-                                                <Input autoComplete="off"/>
-                                            )}
+                                        <Form.Item label="协作者">
+                                            <Select
+                                                mode="multiple"
+                                                placeholder="请选择协作者"
+                                                onChange={this.handleCollaboratorsChange}
+                                                allowClear={true}
+                                            >
+                                                {
+                                                    possibleCollaborators.map(item => (
+                                                        <Select.Option key={item.id}>
+                                                            {`${item.name} ${item.email}`}
+                                                        </Select.Option>
+                                                    ))
+                                                }
+                                            </Select>
                                         </Form.Item>
                                     </Form>
                                 </Modal>
@@ -147,8 +169,9 @@ class MapCollaborator extends Component {
 
 function mapStateToProps(state) {
     return {
-        friendsList: state[namespace].friends,
-        friendId: state[namespace].friendId,
+        friendsList: state['friendsList'].friends,
+        collaborators: state[namespace].collaborators,
     };
 }
+
 export default connect(mapStateToProps)(Form.create()(MapCollaborator));

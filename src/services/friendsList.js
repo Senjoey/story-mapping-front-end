@@ -10,7 +10,7 @@ export function queryList() {
             }).then((res)=>{
                 return res.json()
             }).then((res)=>{
-                console.log(res);
+                console.log('获取好友: ', res);
                 return res;
             }).catch((err)=>{
                 console.log('error: ', err)
