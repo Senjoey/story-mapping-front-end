@@ -1,4 +1,5 @@
 import * as friendNotificationService from '../services/friendNotification';
+import {translateTimestampToTime} from "../util/DateUtil";
 
 export default {
     namespace: 'friendNotification',
@@ -6,7 +7,8 @@ export default {
     state: {
         notification: [],
         readNotification: [],
-        unreadNotification: []
+        unreadNotification: [],
+        mapNotification: []
     },
 
     effects: {
@@ -15,13 +17,24 @@ export default {
             let notification = rsp.content.friendNotificationVOList;
             let readNotification = notification.filter(item => item.status > 0);
             let unreadNotification = notification.filter(item => item.status === 0);
+            let mapNotification = rsp.content.mapNotificationVOList.map(item => {
+                return {
+                    title: item.title,
+                    operationTIme: translateTimestampToTime(new Date(parseInt(item.operationTIme) - 1000 * 60 * 60*14)),
+                    // createTime: item.createTime,
+                    status: item.status,
+                    name: item.name,
+
+                }
+            });
             yield put(
                 {
                     type: 'saveList',
                     payload: {
                         notification: notification,
                         readNotification: readNotification,
-                        unreadNotification: unreadNotification
+                        unreadNotification: unreadNotification,
+                        mapNotification: mapNotification
                     }
                 }
             );
@@ -33,12 +46,13 @@ export default {
     },
 
     reducers: {
-        saveList(state, { payload: { notification, readNotification, unreadNotification} }) {
+        saveList(state, { payload: { notification, readNotification, unreadNotification, mapNotification} }) {
             return {
                 ...state,
                 notification,
                 readNotification,
-                unreadNotification
+                unreadNotification,
+                mapNotification
             }
         },
     }

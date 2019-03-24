@@ -27,7 +27,8 @@ export default {
                     path: '/dashboard/notification/',
                     component: 'Notification/Notification',
                     routes: [
-                        {path: '/dashboard/notification/friends', component: 'Notification/FriendNotification'}
+                        {path: '/dashboard/notification/friends', component: 'Notification/FriendNotification'},
+                        {path: '/dashboard/notification/maps', component: 'Notification/MapNotification'}
                     ]
 
                 },

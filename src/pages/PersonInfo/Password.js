@@ -73,7 +73,7 @@ class Password extends Component{
                                     { validator: this.checkOldAndNewPsw }
                                 ],
                             })(
-                                <Input type="password" id="newPassword"/>
+                                <Input type="password"/>
                             )}
                         </Form.Item>
 
@@ -84,7 +84,7 @@ class Password extends Component{
                                     { validator: this.checkNewAndConformPsw }
                                 ],
                             })(
-                                <Input type="password" id="confirmPassword"/>
+                                <Input type="password"/>
                             )}
                         </Form.Item>
 

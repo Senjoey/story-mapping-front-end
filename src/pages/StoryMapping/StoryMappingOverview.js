@@ -149,6 +149,7 @@ class StoryMappingOverviewPage extends Component {
                                         onCancel={this.handleCancel.bind(this)}
                                         okText="确认"
                                         cancelText="取消"
+
                                     >
                                         <Form>
                                             <Form.Item label="标题">
@@ -197,14 +198,13 @@ class StoryMappingOverviewPage extends Component {
                                                 <Dropdown placement="bottomRight" overlay={
                                                     <Menu className={styles.menu}>
                                                         <Menu.Item onClick={this.handleMapDetailInfo.bind(this, item.id)}><Icon type="file" />查看</Menu.Item>
-                                                        <Menu.Item onClick={this.handleMapEdit.bind(this, item.id)}><Icon type="edit" />修改</Menu.Item>
-                                                        <Menu.Item onClick={this.handleMapDelete.bind(this, item.id)}><Icon type="delete" />删除</Menu.Item>
                                                     </Menu>
                                                 }>
                                                     <Icon type="ellipsis" />
                                                 </Dropdown>
                                             </span>
                                         }
+                                         onClick={this.handleMapDetailInfo.bind(this, item.id)}
                                     >
                                         <p>创建时间: {item.createTime}</p>
                                         <p>ID: {item.id}</p>

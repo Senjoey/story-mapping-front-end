@@ -73,6 +73,7 @@ class FriendNotification extends Component{
                                     />
                                 </List.Item>
                             )}
+                            style={{width: '70%'}}
                         />
                     </div>
 
@@ -89,6 +90,7 @@ class FriendNotification extends Component{
                                     />
                                 </List.Item>
                             )}
+                            style={{width: '70%'}}
                         />
                     </div>
                 </Tabs.TabPane>

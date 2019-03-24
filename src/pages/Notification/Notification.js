@@ -8,12 +8,14 @@ class Notification extends Component{
     render() {
         return(
             <div style={{margin: '64px'}}>
-                <Tabs defaultActiveKey={'friends'} type={'card'}>
+                <Tabs defaultActiveKey={'friends'} type={'card'}
+                onChange={(activeKey)=>{this.props.history.push(`/dashboard/notification/${activeKey}`);}}
+                >
                     <Tabs.TabPane tab={'好友邀请'} key={'friends'}>
                         {this.props.children}
                     </Tabs.TabPane>
                     <Tabs.TabPane tab={'地图通知'} key={'maps'}>
-                        notification of maps
+                        {this.props.children}
                     </Tabs.TabPane>
                 </Tabs>
             </div>
