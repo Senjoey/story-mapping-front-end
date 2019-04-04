@@ -20,7 +20,7 @@ export default {
             let mapNotification = rsp.content.mapNotificationVOList.map(item => {
                 return {
                     title: item.title,
-                    operationTIme: translateTimestampToTime(new Date(parseInt(item.operationTIme) - 1000 * 60 * 60*14)),
+                    operationTIme: translateTimestampToTime(new Date(parseInt(item.operationTIme) - 1000 * 60 * 60*13)),
                     // createTime: item.createTime,
                     status: item.status,
                     name: item.name,

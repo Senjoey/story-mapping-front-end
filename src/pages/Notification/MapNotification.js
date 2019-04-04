@@ -18,7 +18,7 @@ class MapNotification extends Component{
                         <List.Item >
                             <List.Item.Meta
                                 title={item.title}
-                                description={item.status ? `${item.operationTIme}  ${item.name}被添加为协作者` : `${item.operationTIme}  ${item.name}被移除为协作者`}
+                                description={item.status ? `${item.operationTIme}  ${item.name}被移除` : `${item.operationTIme}  ${item.name}被添加为协作者`}
                             />
                         </List.Item>
                     )}
